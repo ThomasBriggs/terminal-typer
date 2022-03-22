@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/thomas/cpp-examples/typer-racer/build/src",
+  "command": "/bin/x86_64-linux-gnu-g++-9   -g -std=gnu++2a -o CMakeFiles/main.dir/main.cpp.o -c /home/thomas/cpp-examples/typer-racer/src/main.cpp",
+  "file": "/home/thomas/cpp-examples/typer-racer/src/main.cpp"
+},
+{
+  "directory": "/home/thomas/cpp-examples/typer-racer/build/src",
+  "command": "/bin/x86_64-linux-gnu-g++-9   -g -std=gnu++2a -o CMakeFiles/main.dir/file.cpp.o -c /home/thomas/cpp-examples/typer-racer/src/file.cpp",
+  "file": "/home/thomas/cpp-examples/typer-racer/src/file.cpp"
+},
+{
+  "directory": "/home/thomas/cpp-examples/typer-racer/build/src",
+  "command": "/bin/x86_64-linux-gnu-g++-9   -g -std=gnu++2a -o CMakeFiles/main.dir/display.cpp.o -c /home/thomas/cpp-examples/typer-racer/src/display.cpp",
+  "file": "/home/thomas/cpp-examples/typer-racer/src/display.cpp"
+},
+{
+  "directory": "/home/thomas/cpp-examples/typer-racer/build/src",
+  "command": "/bin/x86_64-linux-gnu-g++-9   -g -std=gnu++2a -o CMakeFiles/main.dir/util.cpp.o -c /home/thomas/cpp-examples/typer-racer/src/util.cpp",
+  "file": "/home/thomas/cpp-examples/typer-racer/src/util.cpp"
+},
+{
+  "directory": "/home/thomas/cpp-examples/typer-racer/build/src",
+  "command": "/bin/x86_64-linux-gnu-g++-9   -g -std=gnu++2a -o CMakeFiles/test.dir/test.cpp.o -c /home/thomas/cpp-examples/typer-racer/src/test.cpp",
+  "file": "/home/thomas/cpp-examples/typer-racer/src/test.cpp"
+},
+{
+  "directory": "/home/thomas/cpp-examples/typer-racer/build/src",
+  "command": "/bin/x86_64-linux-gnu-g++-9   -g -std=gnu++2a -o CMakeFiles/test.dir/file.cpp.o -c /home/thomas/cpp-examples/typer-racer/src/file.cpp",
+  "file": "/home/thomas/cpp-examples/typer-racer/src/file.cpp"
+}
+]
