@@ -4,34 +4,20 @@
 #include <random>
 #include <algorithm>
 
-// size_t getLineCount(std::ifstream& file)
-// {
-//     auto pos = file.tellg();
-//     unsigned int number_of_lines = std::count(
-//         std::istreambuf_iterator<char>(file),
-//         std::istreambuf_iterator<char>(),
-//         '\n'
-//     ) + 1;
-//     file.seekg(pos);
-//     return number_of_lines;
-// }
-
 size_t getLineCount(std::ifstream& file)
 {
     auto pos = file.tellg();
-    size_t count = 0;
-    std::string s;
-    while (std::getline(file, s))
-    {
-        count++;
-    }
+    unsigned int number_of_lines = std::count(
+        std::istreambuf_iterator<char>(file),
+        std::istreambuf_iterator<char>(),
+        '\n'
+    ) + 1;
     file.seekg(pos);
-    return count;
+    return number_of_lines;
 }
 
 std::vector<std::string> getRandomWords(const std::string& f, u_short n)
 {
-
     std::ifstream file(f);
     size_t number_of_lines = getLineCount(file);
     if (n > number_of_lines) { std::__throw_out_of_range("Not enough words in the file"); }

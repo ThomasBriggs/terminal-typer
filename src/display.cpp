@@ -10,18 +10,21 @@ void displayWords(WINDOW* win, std::vector<std::string> words, int currentWord, 
     u_int min_y = 1, min_x = 1, max_x = getmaxx(win) - 1;
     wmove(win, min_y, min_x);
     auto&& curWord = words[0];
-    for(size_t i = 0; i < words.size(); i++)
-    {
+    for (size_t i = 0; i < words.size(); i++) {
         curWord = words[i];
-        //Move cursor down if word won't fit on the line
-        if (!(getcurx(win) + curWord.size() < max_x)) { wmove(win, getcury(win) + 1, min_x); }
-        if (i < currentWord)
-        {
-            if (inputWords[i] == words[i]) colour = 7;
-            else colour = 6;
+        // Move cursor down if word won't fit on the line
+        if (!(getcurx(win) + curWord.size() < max_x)) {
+            wmove(win, getcury(win) + 1, min_x);
         }
-        //If the word to be displayed is the current word turn it blue
-        if (i == currentWord) colour = 5;
+        if (i < currentWord) {
+            if (inputWords[i] == words[i])
+                colour = 7;
+            else
+                colour = 6;
+        }
+        // If the word to be displayed is the current word turn it blue
+        if (i == currentWord)
+            colour = 5;
         wattron(win, COLOR_PAIR(colour));
         wprintw(win, (curWord + ' ').c_str());
         wattroff(win, COLOR_PAIR(colour));
@@ -35,7 +38,6 @@ void displayInput(WINDOW* win, const std::string& s)
     wmove(win, 1, 1);
     wprintw(win, s.c_str());
 }
-
 
 void clearInput(WINDOW* win)
 {
@@ -63,7 +65,7 @@ WINDOW* getPromptWin()
     return win;
 }
 
-void drawInput(WINDOW * win)
+void drawInput(WINDOW* win)
 {
     init_pair(2, COLOR_CYAN, -1);
     wattron(win, COLOR_PAIR(2));
@@ -72,4 +74,13 @@ void drawInput(WINDOW * win)
     wattron(win, A_BOLD);
     mvwprintw(win, 0, 1, "Input");
     wattroff(win, A_BOLD);
+}
+
+void displayResults(const std::chrono::milliseconds& duration, const size_t& charsTyped, const size_t& numWords,
+    const std::vector<std::string>& inputWords, const std::vector<std::string>& words)
+{
+    std::cout << "Time: " << duration.count() << "ms" << '\n';
+    std::cout << "WPM (chars): " << std::roundf(((charsTyped / 5) / (duration.count() / 60000.f)) * 100) / 100 << '\n';
+    std::cout << "WPM (words): " << std::roundf(numWords / (duration.count() / 60000.f) * 100) / 100 << '\n';
+    std::cout << "Accuracy: " << getAccuracy(inputWords, words) << '%' << '\n';
 }

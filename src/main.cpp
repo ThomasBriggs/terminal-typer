@@ -5,7 +5,6 @@
 #include <cctype>
 #include <algorithm>
 #include <chrono>
-#include <cmath>
 #include "util.h"
 
 int main()
@@ -29,7 +28,7 @@ int main()
 
     auto words = getRandomWords
     (
-        "/home/thomas/Documents/cpp-examples/typer-racer/src/top_1000.txt",
+        "/home/thomas/terminal-typer/src/top_100.txt",
         numWords
     );
 
@@ -55,7 +54,7 @@ int main()
             inputWords[curWord] += input;
             displayInput(inputWin, inputWords[curWord]);
         }
-        else if (input == 127)
+        else if (input == KEY_BACKSPACE)
         {
             if (inputWords[curWord].empty()) curWord = std::max(0, curWord - 1);
             else (inputWords[curWord].pop_back());
@@ -76,12 +75,9 @@ int main()
         wrefresh(inputWin);
         wrefresh(promptWin);
     }
-    clock::time_point stop = clock::now();
     endwin();
+    clock::time_point stop = clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    std::cout << "Time: " << duration.count() << "ms" << '\n';
-    std::cout << "WPM (chars): " << std::roundf(((charsTyped / 5) / (duration.count() / 60000.f)) * 100) / 100 << '\n';
-    std::cout << "WPM (words): " << std::roundf(numWords / (duration.count() / 60000.f) * 100) / 100 << '\n';
-    std::cout << "Accuracy: " << getAccuracy(inputWords, words) << '%' << '\n';
+    displayResults(duration, charsTyped, numWords, inputWords, words);
     return 0;
 }
