@@ -14,5 +14,5 @@ void clearInput(WINDOW* win);
 void drawInput(WINDOW* win);
 WINDOW* getInputWin();
 WINDOW* getPromptWin();
-void displayResults(const std::chrono::milliseconds& duration, const size_t& charsTyped, const size_t& numWords,
+void displayResults(const std::chrono::milliseconds& duration, const size_t& charsTyped, const size_t& correctCharsTyped, const size_t& numWords,
     const std::vector<std::string>& inputWords, const std::vector<std::string>& words);

@@ -1,14 +1,14 @@
-#include <curses.h>
-#include <iostream>
+#include "typer.h"
 #include "display.h"
 #include "file.h"
-#include <cctype>
-#include <algorithm>
-#include <chrono>
 #include "util.h"
-#include "typer.h"
+#include <algorithm>
+#include <cctype>
+#include <chrono>
+#include <curses.h>
+#include <iostream>
 
-int typer(std::vector<std::string> words)
+void ncurses_setup()
 {
     initscr();
     use_default_colors();
@@ -18,8 +18,11 @@ int typer(std::vector<std::string> words)
     noecho();
     start_color();
     curs_set(0);
+}
 
-    u_short numWords = words.size();
+int typer(std::vector<std::string> words)
+{
+    ncurses_setup();
 
     WINDOW* inputWin = getInputWin();
     WINDOW* promptWin = getPromptWin();
@@ -27,45 +30,45 @@ int typer(std::vector<std::string> words)
     wrefresh(inputWin);
     wrefresh(promptWin);
 
-    std::vector<std::string> inputWords(words.size());
+    u_short numWords = words.size();
+    std::vector<std::string> typedWords(words.size());
     int input;
     int curWord = 0;
-    displayWords(promptWin, words, curWord, inputWords);
-    wrefresh(promptWin);
+    size_t charsTyped = 0;
+    size_t correctCharsTyped = 0;
 
     bool active = true;
-    wmove(inputWin, 1, 1);
     typedef std::chrono::system_clock clock;
     auto start = clock::time_point::min();
 
-    u_int charsTyped = 0;
-    while (active)
-    {
+    displayWords(promptWin, words, curWord, typedWords);
+    wrefresh(promptWin);
+    wmove(inputWin, 1, 1);
+    while (active) {
         input = getch();
-        if (start == clock::time_point::min()) start = clock::now();
-        if (std::isalpha(input) || std::isdigit(input))
-        {
+        if (start == clock::time_point::min())
+            start = clock::now();
+        if (std::isalpha(input) || std::isdigit(input)) {
             charsTyped++;
-            inputWords[curWord] += input;
-            displayInput(inputWin, inputWords[curWord]);
-        }
-        else if (input == KEY_BACKSPACE)
-        {
-            if (inputWords[curWord].empty()) curWord = std::max(0, curWord - 1);
-            else (inputWords[curWord].pop_back());
-            displayWords(promptWin, words, curWord, inputWords);
-            displayInput(inputWin, inputWords[curWord]);
-        }
-        else if (input == ' ')
-        {
+            typedWords[curWord] += input;
+            if (isCharCorrect(words[curWord], typedWords[curWord]))
+                correctCharsTyped++;
+            displayInput(inputWin, typedWords[curWord]);
+        } else if (input == KEY_BACKSPACE) {
+            if (typedWords[curWord].empty())
+                curWord = std::max(0, curWord - 1);
+            else
+                (typedWords[curWord].pop_back());
+            displayWords(promptWin, words, curWord, typedWords);
+            displayInput(inputWin, typedWords[curWord]);
+        } else if (input == ' ') {
             curWord += 1;
-            if (curWord >= words.size())
-            {
+            if (curWord >= words.size()) {
                 active = true;
                 break;
             }
-            displayInput(inputWin, inputWords[curWord]);
-            displayWords(promptWin, words, curWord, inputWords);
+            displayInput(inputWin, typedWords[curWord]);
+            displayWords(promptWin, words, curWord, typedWords);
         }
         wrefresh(inputWin);
         wrefresh(promptWin);
@@ -73,6 +76,6 @@ int typer(std::vector<std::string> words)
     endwin();
     auto stop = clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    displayResults(duration, charsTyped, numWords, inputWords, words);
+    displayResults(duration, charsTyped, correctCharsTyped, numWords, typedWords, words);
     return 0;
 }
