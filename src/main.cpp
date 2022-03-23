@@ -1,10 +1,16 @@
 #include "file.h"
 #include "typer.h"
+#include <iostream>
 
 int main(int argc, char const* argv[])
 {
-    size_t numWords = 50;
-    auto words = getRandomWords("/home/thomas/terminal-typer/src/top_1000.txt", numWords);
+    std::vector<std::string> words;
+
+    if (argc == 1) {
+        words = getRandomWords("/home/thomas/terminal-typer/top_100.txt", 50);
+        std::cout << "Test" << '\n';
+    }
+
     typer(words);
     return 0;
 }
