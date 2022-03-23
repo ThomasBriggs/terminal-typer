@@ -59,8 +59,8 @@ int typer(std::vector<std::string> words)
                 curWord = std::max(0, curWord - 1);
             else
                 (typedWords[curWord].pop_back());
-            displayWords(promptWin, words, curWord, typedWords);
             displayInput(inputWin, typedWords[curWord]);
+            displayWords(promptWin, words, curWord, typedWords);
         } else if (input == ' ') {
             curWord += 1;
             if (curWord >= words.size()) {
