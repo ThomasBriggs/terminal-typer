@@ -81,7 +81,8 @@ void displayResults(const std::chrono::milliseconds& duration, const size_t& cha
 {
     std::cout << "Time: " << duration.count() << "ms" << '\n';
     std::cout << "WPM (chars): " << std::roundf(((charsTyped / 5) / (duration.count() / 60000.f)) * 100) / 100 << '\n';
-    std::cout << "WPM (words): " << std::roundf(numWords / (duration.count() / 60000.f) * 100) / 100 << '\n';
-    std::cout << "Accuracy: " << getAccuracy(inputWords, words) << '%' << '\n';
+    std::cout << "WPM (Gross): " << std::roundf(numWords / (duration.count() / 60000.f) * 100) / 100 << '\n';
+    std::cout << "Accuracy (chars): " << (float)correctCharsTyped/charsTyped * 100 << '%' << '\n';
+    std::cout << "Accuracy (words): " << getAccuracy(inputWords, words) << '%' << '\n';
     std::cout << "Chars typed: " << charsTyped << ", Correct Chars Typed: " << correctCharsTyped << '\n';
 }
