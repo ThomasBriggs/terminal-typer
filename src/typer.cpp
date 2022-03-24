@@ -48,27 +48,30 @@ int typer(std::vector<std::string> words)
         input = getch();
         if (start == clock::time_point::min())
             start = clock::now();
-        if (std::isalpha(input) || std::isdigit(input)) {
-            charsTyped++;
-            typedWords[curWord] += input;
-            if (isCharCorrect(words[curWord], typedWords[curWord]))
-                correctCharsTyped++;
-            displayInput(inputWin, typedWords[curWord]);
-        } else if (input == KEY_BACKSPACE) {
+
+        switch (input) {
+        case KEY_BACKSPACE:
             if (typedWords[curWord].empty())
                 curWord = std::max(0, curWord - 1);
             else
                 (typedWords[curWord].pop_back());
             displayInput(inputWin, typedWords[curWord]);
             displayWords(promptWin, words, curWord, typedWords);
-        } else if (input == ' ') {
+            break;
+        case ' ':
             curWord += 1;
-            if (curWord >= words.size()) {
+            if (curWord >= words.size())
                 active = true;
-                break;
-            }
             displayInput(inputWin, typedWords[curWord]);
             displayWords(promptWin, words, curWord, typedWords);
+            break;
+        default:
+            charsTyped++;
+            typedWords[curWord] += input;
+            if (isCharCorrect(words[curWord], typedWords[curWord]))
+                correctCharsTyped++;
+            displayInput(inputWin, typedWords[curWord]);
+            break;
         }
         wrefresh(inputWin);
         wrefresh(promptWin);
