@@ -61,7 +61,7 @@ int typer(std::vector<std::string> words)
         case ' ':
             curWord += 1;
             if (curWord >= words.size())
-                active = true;
+                active = false;
             displayInput(inputWin, typedWords[curWord]);
             displayWords(promptWin, words, curWord, typedWords);
             break;
