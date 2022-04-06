@@ -38,7 +38,7 @@ std::vector<std::string> getRandomWords(const std::string& f, u_short n)
                 words[i] = line;
             }
         }
-        ++line_number;
+        line_number++;
     }
     return words;
 }
