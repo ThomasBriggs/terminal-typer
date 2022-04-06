@@ -11,9 +11,10 @@ int main(int argc, char const* argv[])
         words = getRandomWords("/home/thomas/terminal-typer/top_100.txt", 50);
     else if (argc == 2) {
         int num = std::stoi(std::string(argv[1]));
-        if (num < 0)
+        if (num < 1) {
             std::cerr << "Please enter a number above 0!\n";
-        else if (num > 100)
+            exit(1);
+        } else if (num > 101)
             words = getRandomWords("/home/thomas/terminal-typer/top_1000.txt", num);
         else
             words = getRandomWords("/home/thomas/terminal-typer/top_100.txt", num);
