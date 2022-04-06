@@ -66,6 +66,8 @@ int typer(std::vector<std::string> words)
             displayWords(promptWin, words, curWord, typedWords);
             break;
         default:
+            if (typedWords[curWord].size() == getmaxx(inputWin)-2)
+                break;
             charsTyped++;
             typedWords[curWord] += input;
             if (isCharCorrect(words[curWord], typedWords[curWord]))
