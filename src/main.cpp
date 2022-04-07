@@ -1,4 +1,5 @@
 #include "cxxopts.hpp"
+#include "error_handeling.h"
 #include "file.h"
 #include "typer.h"
 #include <filesystem>
@@ -7,7 +8,10 @@
 
 int main(int argc, char const* argv[])
 {
-    std::filesystem::path root = "../res";
+    std::filesystem::path root = argv[0];
+    root = root.parent_path().parent_path().append("res");
+    if (root == "res")
+        root = "../res";
     std::vector<std::string> words;
     bool mode_set = false;
 
@@ -20,8 +24,10 @@ int main(int argc, char const* argv[])
 
     auto results = options.parse(argc, argv);
 
-    if (argc == 1)
+    if (argc == 1) {
+        mode_set = true;
         words = getRandomWords(root.append(results["words-list"].as<std::string>()), results["words"].as<int>());
+    }
 
     if (results.count("help")) {
         std::cout << options.help() << '\n';
@@ -29,6 +35,7 @@ int main(int argc, char const* argv[])
     }
 
     if (results.count("quote")) {
+        checkModeSet(mode_set);
         mode_set = true;
         const std::string& quotePath = results["quote"].as<std::string>();
         if (quotePath == "")
@@ -39,6 +46,7 @@ int main(int argc, char const* argv[])
     }
 
     if (results.count("words")) {
+        checkModeSet(mode_set);
         mode_set = true;
         words = getRandomWords(root.append(results["words-list"].as<std::string>()), results["words"].as<int>());
     }

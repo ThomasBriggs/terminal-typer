@@ -1,4 +1,5 @@
 #include "file.h"
+#include "error_handeling.h"
 #include <algorithm>
 #include <exception>
 #include <filesystem>
@@ -24,9 +25,7 @@ size_t getLineCount(std::ifstream& file)
 std::vector<std::string> getRandomWords(const std::string& f, u_short n)
 {
     std::ifstream file(f);
-    if (!file.is_open())
-        throw std::filesystem::filesystem_error("The file could not be opened", f, std::error_code(2, std::system_category()));
-
+    checkIfFileCanBeOpened(file, f);
     size_t number_of_lines = getLineCount(file);
     if (n < number_of_lines)
         return getRandomWordsNoRepeat(file, n, number_of_lines);
@@ -89,9 +88,7 @@ std::vector<std::string> getRandomWordsNoRepeat(std::ifstream& file, u_short n, 
 std::vector<std::string> getAllWords(const std::string& f)
 {
     std::ifstream file(f);
-    //TODO Make into function
-    if (!file.is_open())
-        throw std::filesystem::filesystem_error("The file could not be opened", f, std::error_code(2, std::system_category()));
+    checkIfFileCanBeOpened(file, f);
     size_t numLines = getLineCount(file);
     std::vector<std::string> words(numLines);
 
