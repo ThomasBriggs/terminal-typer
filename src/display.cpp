@@ -1,7 +1,7 @@
 #include "display.h"
 #include <curses.h>
 
-void displayWords(WINDOW* win, std::vector<std::string> words, int currentWord, std::vector<std::string> inputWords)
+void displayWords(WINDOW* const win, const std::vector<std::string>& words, int currentWord, const std::vector<std::string>& inputWords)
 {
     init_pair(5, COLOR_BLUE, -1);
     init_pair(6, COLOR_RED, -1);
@@ -9,37 +9,51 @@ void displayWords(WINDOW* win, std::vector<std::string> words, int currentWord, 
     short colour;
     u_int min_y = 1, min_x = 1, max_x = getmaxx(win) - 1;
     wmove(win, min_y, min_x);
-    auto&& curWord = words[0];
+    const std::string* curWord;
     for (size_t i = 0; i < words.size(); i++) {
-        curWord = words[i];
+        curWord = &words[i];
         // Move cursor down if word won't fit on the line
-        if (!(getcurx(win) + curWord.size() < max_x)) {
+        if (!(getcurx(win) + curWord->size() < max_x)) {
             wmove(win, getcury(win) + 1, min_x);
         }
+
+        // Display previous words
         if (i < currentWord) {
-            if (inputWords[i] == words[i])
+            if (inputWords[i] == words[i]) // If the displayed matches the word typed, make it green
                 colour = 7;
-            else
+            else // Make if red
                 colour = 6;
         }
-        // If the word to be displayed is the current word turn it blue
+
+        // Display the current word
         if (i == currentWord)
-            colour = 5;
+            if (inputWords.size() != 0) {
+                /*BUG Only checks if the last typed char is correct, eg if you type a incorrect char
+                followed by a correct one it will pass turn it blue*/
+                if (isCharCorrect(words[currentWord], inputWords[currentWord]))
+                    colour = 5;
+
+                else
+                    colour = 6;
+            } else
+                colour = 5;
+
         wattron(win, COLOR_PAIR(colour));
-        wprintw(win, (curWord + ' ').c_str());
+        wprintw(win, curWord->c_str());
+        wprintw(win, " ");
         wattroff(win, COLOR_PAIR(colour));
         colour = 0;
     }
 }
 
-void displayInput(WINDOW* win, const std::string& s)
+void displayInput(WINDOW* const win, const std::string& s)
 {
     clearInput(win);
     wmove(win, 1, 1);
     wprintw(win, s.c_str());
 }
 
-void clearInput(WINDOW* win)
+void clearInput(WINDOW* const win)
 {
     werase(win);
     drawInput(win);
@@ -65,7 +79,7 @@ WINDOW* getPromptWin()
     return win;
 }
 
-void drawInput(WINDOW* win)
+void drawInput(WINDOW* const win)
 {
     init_pair(2, COLOR_CYAN, -1);
     wattron(win, COLOR_PAIR(2));
@@ -80,13 +94,13 @@ void displayResults(const std::chrono::milliseconds& duration, const size_t& cha
     const std::vector<std::string>& inputWords, const std::vector<std::string>& words)
 {
     auto time = duration.count() / 60000.f;
-    auto gross_wpm = std::roundf((charsTyped / 5)  / (duration.count() / 60000.f) * 100) / 100;
-    auto net_wpm = gross_wpm - ((charsTyped - correctCharsTyped)/time);
-    
+    auto gross_wpm = std::roundf((charsTyped / 5) / (duration.count() / 60000.f) * 100) / 100;
+    auto net_wpm = gross_wpm - ((charsTyped - correctCharsTyped) / time);
+
     std::cout << "Time: " << duration.count() << "ms\n";
     std::cout << "WPM (chars): " << net_wpm << '\n';
     std::cout << "WPM (Gross): " << gross_wpm << '\n';
-    std::cout << "Accuracy (chars): " << (float)correctCharsTyped/charsTyped * 100 << "%\n";
+    std::cout << "Accuracy (chars): " << (float)correctCharsTyped / charsTyped * 100 << "%\n";
     std::cout << "Accuracy (words): " << getAccuracy(inputWords, words) << "%\n";
     std::cout << "Chars typed: " << charsTyped << ", Correct Chars Typed: " << correctCharsTyped << '\n';
 }

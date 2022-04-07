@@ -51,6 +51,7 @@ int typer(std::vector<std::string> words)
 
         switch (input) {
         case KEY_BACKSPACE:
+        case 127:
             if (typedWords[curWord].empty())
                 curWord = std::max(0, curWord - 1);
             else
@@ -66,13 +67,14 @@ int typer(std::vector<std::string> words)
             displayWords(promptWin, words, curWord, typedWords);
             break;
         default:
-            if (typedWords[curWord].size() == getmaxx(inputWin)-2)
+            if (typedWords[curWord].size() == getmaxx(inputWin) - 2)
                 break;
             charsTyped++;
             typedWords[curWord] += input;
             if (isCharCorrect(words[curWord], typedWords[curWord]))
                 correctCharsTyped++;
             displayInput(inputWin, typedWords[curWord]);
+            displayWords(promptWin, words, curWord, typedWords);
             break;
         }
         wrefresh(inputWin);
@@ -80,7 +82,7 @@ int typer(std::vector<std::string> words)
     }
     endwin();
     auto stop = clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    displayResults(duration, charsTyped, correctCharsTyped, numWords, typedWords, words);
+    displayResults(std::chrono::duration_cast<std::chrono::milliseconds>(stop - start),
+        charsTyped, correctCharsTyped, numWords, typedWords, words);
     return 0;
 }
