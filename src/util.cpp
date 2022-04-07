@@ -15,12 +15,21 @@ bool isCharCorrect(const std::string& currentWord, const std::string& inputWord)
     if (inputWord.size() > currentWord.size())
         return false;
 
-    //TODO remove once alternative is added
-    if (inputWord.size() == 0)
-        return true;
-
     if (inputWord.back() == currentWord.at(inputWord.size() - 1))
         return true;
 
     return false;
+}
+
+bool isInputCorrect(const std::string& word, const std::string& input)
+{
+    if (input.size() == 0)
+        return true;
+
+    for (size_t i = 0; i < input.size(); i++) {
+        if (input.at(i) != word.at(i))
+            return false;
+    }
+
+    return true;
 }
