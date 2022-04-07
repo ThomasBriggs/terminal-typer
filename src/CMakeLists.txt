@@ -9,6 +9,8 @@ add_library(terminal-typer
     util.cpp
 )
 
+add_dependencies(terminal-typer cxxopts)
+
 add_executable(main main.cpp)
 add_executable(quote quote.cpp)
 

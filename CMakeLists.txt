@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.20.0)
 #Project name and version
 project("typer-racer")
 
+#Includes
+include(ExternalProject)
+
 #C++ standard for the project
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
@@ -22,4 +25,5 @@ endif()
 
 
 #Main Source Directory
+add_subdirectory(libs)
 add_subdirectory(src)
