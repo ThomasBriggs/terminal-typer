@@ -10,7 +10,7 @@ float getAccuracy(const std::vector<std::string>& input, const std::vector<std::
     return correct / denom * 100;
 }
 
-double isCharCorrect(const std::string& currentWord, const std::string& inputWord)
+bool isCharCorrect(const std::string& currentWord, const std::string& inputWord)
 {
     if (inputWord.size() > currentWord.size())
         return false;
