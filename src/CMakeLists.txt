@@ -8,6 +8,7 @@ add_library(terminal-typer
     file.cpp
     display.cpp
     util.cpp
+    error_handeling.cpp
 )
 
 
@@ -22,5 +23,3 @@ set_target_properties(
 
 target_link_libraries(main terminal-typer cxxopts-lib)
 target_link_libraries(quote terminal-typer)
-
-add_executable(test test.cpp file.cpp)
