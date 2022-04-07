@@ -27,16 +27,11 @@ void displayWords(WINDOW* const win, const std::vector<std::string>& words, int 
 
         // Display the current word
         if (i == currentWord)
-            if (inputWords.size() != 0) {
-                /*BUG Only checks if the last typed char is correct, eg if you type a incorrect char
-                followed by a correct one it will pass turn it blue*/
-                if (isCharCorrect(words[currentWord], inputWords[currentWord]))
-                    colour = 5;
-
-                else
-                    colour = 6;
-            } else
+            if (isInputCorrect(words[currentWord], inputWords[currentWord]))
                 colour = 5;
+            else
+
+                colour = 6;
 
         wattron(win, COLOR_PAIR(colour));
         wprintw(win, curWord->c_str());
