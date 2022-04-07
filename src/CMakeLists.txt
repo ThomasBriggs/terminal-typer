@@ -21,5 +21,5 @@ set_target_properties(
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-target_link_libraries(main terminal-typer cxxopts-lib)
+target_link_libraries(main terminal-typer cxxopts-lib ncurses-lib)
 target_link_libraries(quote terminal-typer)
