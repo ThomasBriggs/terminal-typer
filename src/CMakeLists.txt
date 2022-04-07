@@ -1,5 +1,6 @@
 
 find_package(Curses REQUIRED)
+
 link_libraries(${CURSES_LIBRARIES})
 
 add_library(terminal-typer
@@ -9,7 +10,6 @@ add_library(terminal-typer
     util.cpp
 )
 
-add_dependencies(terminal-typer cxxopts)
 
 add_executable(main main.cpp)
 add_executable(quote quote.cpp)
@@ -20,7 +20,7 @@ set_target_properties(
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-target_link_libraries(main terminal-typer)
+target_link_libraries(main terminal-typer cxxopts-lib)
 target_link_libraries(quote terminal-typer)
 
 add_executable(test test.cpp file.cpp)
