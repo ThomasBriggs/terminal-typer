@@ -8,12 +8,10 @@ set(SRC_FILES
 )
 
 add_executable(main ${SRC_FILES})
-add_dependencies(main BUILD_LIBS)
+target_link_libraries(main ncurses-lib cxxopts-lib)
 
 set_target_properties(
     main
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
-
-target_link_libraries(main ncurses-lib cxxopts-lib)
