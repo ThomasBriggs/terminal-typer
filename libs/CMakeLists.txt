@@ -14,7 +14,7 @@ ExternalProject_Add(ncurses-build
     EXCLUDE_FROM_ALL TRUE
     INSTALL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ncurses
     GIT_REPOSITORY git@github.com:mirror/ncurses.git
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix <INSTALL_DIR> --with-shared --without-normal --without-debug --without-manpages
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix <INSTALL_DIR> --with-normal --without-debug --without-manpages
     BUILD_COMMAND make -C <BINARY_DIR>
     INSTALL_COMMAND make -C <BINARY_DIR> install
 )
