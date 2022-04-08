@@ -6,7 +6,6 @@ ExternalProject_Add(cxxopts
 )
 
 add_library(cxxopts-lib INTERFACE)
-add_dependencies(cxxopts-lib cxxopts)
 target_include_directories(cxxopts-lib INTERFACE "cxxopts/include")
 
 ExternalProject_Add(ncurses-build
@@ -18,6 +17,8 @@ ExternalProject_Add(ncurses-build
 )
 
 add_library(ncurses-lib INTERFACE)
-add_dependencies(ncurses-lib ncurses-build)
 target_link_libraries(ncurses-lib INTERFACE -L${CMAKE_CURRENT_SOURCE_DIR}/ncurses/lib -lncurses)
 target_include_directories(ncurses-lib INTERFACE ncurses/include)
+
+add_custom_target(BUILD_LIBS)
+add_dependencies(BUILD_LIBS ncurses-lib cxxopts-lib)
