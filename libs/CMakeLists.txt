@@ -1,4 +1,5 @@
 ExternalProject_Add(cxxopts-extern
+    EXCLUDE_FROM_ALL TRUE
     INSTALL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cxxopts
     GIT_REPOSITORY https://github.com/jarro2783/cxxopts.git
     GIT_TAG 8185e6b
@@ -12,6 +13,7 @@ add_dependencies(cxxopts-lib cxxopts-extern)
 target_include_directories(cxxopts-lib INTERFACE "cxxopts/include")
 
 ExternalProject_Add(ncurses-extern
+    EXCLUDE_FROM_ALL TRUE
     INSTALL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ncurses
     GIT_REPOSITORY https://github.com/mirror/ncurses.git
     GIT_TAG 64eb5fa
