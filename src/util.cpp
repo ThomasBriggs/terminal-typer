@@ -26,6 +26,9 @@ bool isInputCorrect(const std::string& word, const std::string& input)
     if (input.size() == 0)
         return true;
 
+    if (input.size() > word.size())
+        return false;
+
     for (size_t i = 0; i < input.size(); i++) {
         if (input.at(i) != word.at(i))
             return false;
