@@ -7,9 +7,8 @@ set(SRC_FILES
     error_handeling.cpp
 )
 
-message(${SRC_FILES})
-
 add_executable(main ${SRC_FILES})
+add_dependencies(main BUILD_LIBS)
 
 set_target_properties(
     main
