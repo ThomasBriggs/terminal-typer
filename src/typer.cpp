@@ -50,6 +50,15 @@ int typer(std::vector<std::string> words)
             start = clock::now();
 
         switch (input) {
+        case KEY_RESIZE:
+            wresize(stdscr, getmaxy(stdscr), getmaxx(stdscr));
+            wclear(stdscr);
+            wclear(inputWin);
+            wclear(promptWin);
+            displayInput(inputWin, typedWords[curWord]);
+            drawPrompt(promptWin);
+            displayWords(promptWin, words, curWord, typedWords);
+            refresh();
         case KEY_BACKSPACE:
         case 127:
             if (typedWords[curWord].empty())
