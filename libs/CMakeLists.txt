@@ -20,5 +20,7 @@ add_library(ncurses-lib INTERFACE)
 target_link_libraries(ncurses-lib INTERFACE -L${CMAKE_CURRENT_SOURCE_DIR}/ncurses/lib -lncurses)
 target_include_directories(ncurses-lib INTERFACE ncurses/include)
 
-add_custom_target(BUILD_LIBS)
-add_dependencies(BUILD_LIBS ncurses-lib cxxopts-lib)
+add_custom_target(BUILD_LIBS
+    DEPENDS ncurses-build
+    DEPENDS cxxopts
+)

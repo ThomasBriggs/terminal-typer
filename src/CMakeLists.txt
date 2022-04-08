@@ -1,7 +1,5 @@
-# find_package(Curses REQUIRED)
-
-
-add_library(terminal-typer
+set(SRC_FILES 
+    main.cpp
     typer.cpp    
     file.cpp
     display.cpp
@@ -9,10 +7,9 @@ add_library(terminal-typer
     error_handeling.cpp
 )
 
-# target_link_libraries(terminal-typer ${CURSES_LIBRARIES})
-target_link_libraries(terminal-typer ncurses-lib)
+message(${SRC_FILES})
 
-add_executable(main main.cpp)
+add_executable(main ${SRC_FILES})
 
 set_target_properties(
     main
@@ -20,4 +17,4 @@ set_target_properties(
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-target_link_libraries(main terminal-typer cxxopts-lib)
+target_link_libraries(main ncurses-lib cxxopts-lib)
