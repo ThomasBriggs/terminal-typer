@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ncurses/ncurses.h"
+#include "ncurses.h"
 #include "util.h"
 #include <chrono>
 #include <cmath>

@@ -2,7 +2,7 @@
 #include "display.h"
 #include "file.h"
 #include "util.h"
-#include "ncurses/ncurses.h"
+#include "ncurses.h"
 #include <algorithm>
 #include <cctype>
 #include <chrono>
