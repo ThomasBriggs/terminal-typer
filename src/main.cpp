@@ -6,27 +6,51 @@
 #include <iostream>
 #include <string>
 
-int main(int argc, char const* argv[])
+cxxopts::Options setupArgs()
 {
-    std::filesystem::path root = argv[0];
-    root = root.parent_path().parent_path().append("res");
-    if (root == "res")
-        root = "../res";
-    std::vector<std::string> words;
-    bool mode_set = false;
-
     cxxopts::Options options("Terminal-typer", "A terminal typing game");
     options.add_options()(
         "q, quote", "Type a random quote", cxxopts::value<std::string>()->implicit_value(""))(
-        "w, words", "Type 50 random words from top 100 words, or --words=X where X is the number of words", cxxopts::value<int>()->implicit_value("50")->default_value("50"))(
+        "w, words", "Type 50 random words from top 100 words, or --words = X where X is the number of words ", cxxopts::value<int>()->implicit_value("50")->default_value("50"))(
         "words-list", "The word list to choose random words from, if used with --quote, this will have no effect", cxxopts::value<std::string>()->default_value("top_100.txt"))(
         "h, help", "Print usage");
 
-    auto results = options.parse(argc, argv);
+    return options;
+}
 
+std::filesystem::path setupPath(char const* argv[])
+{
+    std::filesystem::path root = argv[0];
+    if (root.parent_path().has_parent_path())
+        root = root.parent_path().parent_path().append("res");
+    else
+        root = "../res";
+    return root;
+}
+
+int main(int argc, char const* argv[])
+{
+    auto root = setupPath(argv);
+    auto options = setupArgs();
+    
+    std::vector<std::string> words;
+    bool mode_set = false;
+
+    cxxopts::ParseResult results;
+    try {
+        results = options.parse(argc, argv);
+    } catch (cxxopts::option_syntax_exception& e) {
+        std::cerr << "Please check your arguments!, see the help\n";
+        std::cout << options.help();
+        exit(1);
+    }
+
+    // If no arguments are given, set the words to be the default arguments and go to the main loop,
+    // skip checking args as none are given.
     if (argc == 1) {
         mode_set = true;
         words = getRandomWords(root.append(results["words-list"].as<std::string>()), results["words"].as<int>());
+        goto main;
     }
 
     if (results.count("help")) {
@@ -54,6 +78,7 @@ int main(int argc, char const* argv[])
     if (!mode_set)
         words = getRandomWords(root.append(results["words-list"].as<std::string>()), results["words"].as<int>());
 
+main:
     typer(words);
     return 0;
 }
