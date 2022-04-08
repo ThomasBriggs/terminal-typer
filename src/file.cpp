@@ -100,3 +100,12 @@ std::vector<std::string> getAllWords(const std::string& f)
     }
     return words;
 }
+
+void printWordLists(const std::string& filepath)
+{
+    std::vector<std::string> files;
+    for (auto &&i : std::filesystem::directory_iterator(filepath))
+    {
+        std::cout << i.path().filename().c_str() << '\n';
+    }
+}

@@ -13,6 +13,7 @@ cxxopts::Options setupArgs()
         "q, quote", "Type a random quote", cxxopts::value<std::string>()->implicit_value(""))(
         "w, words", "Type 50 random words from top 100 words, or --words = X where X is the number of words ", cxxopts::value<int>()->implicit_value("50")->default_value("50"))(
         "words-list", "The word list to choose random words from, if used with --quote, this will have no effect", cxxopts::value<std::string>()->default_value("top_100.txt"))(
+        "l, list-resources", "List the avilables word lists")(
         "h, help", "Print usage");
 
     return options;
@@ -32,9 +33,10 @@ int main(int argc, char const* argv[])
 {
     auto root = setupPath(argv);
     auto options = setupArgs();
-    
+
     std::vector<std::string> words;
     bool mode_set = false;
+    bool non_mode_set = false;
 
     cxxopts::ParseResult results;
     try {
@@ -73,6 +75,11 @@ int main(int argc, char const* argv[])
         checkModeSet(mode_set);
         mode_set = true;
         words = getRandomWords(root.append(results["words-list"].as<std::string>()), results["words"].as<int>());
+    }
+
+    if (results.count("list-resources")) {
+        printWordLists(root.c_str());
+        exit(0);
     }
 
     if (!mode_set)
