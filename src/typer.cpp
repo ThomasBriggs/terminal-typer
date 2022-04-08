@@ -1,8 +1,8 @@
 #include "typer.h"
 #include "display.h"
 #include "file.h"
-#include "ncurses.h"
 #include "util.h"
+#include "ncurses/ncurses.h"
 #include <algorithm>
 #include <cctype>
 #include <chrono>
