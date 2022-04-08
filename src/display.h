@@ -1,9 +1,9 @@
 #pragma once
 
+#include "ncurses.h"
 #include "util.h"
 #include <chrono>
 #include <cmath>
-#include <curses.h>
 #include <iostream>
 #include <string>
 #include <vector>

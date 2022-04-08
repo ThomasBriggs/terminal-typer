@@ -1,5 +1,5 @@
 #include "display.h"
-#include <curses.h>
+#include "ncurses.h"
 
 void displayWords(WINDOW* const win, const std::vector<std::string>& words, int currentWord, const std::vector<std::string>& inputWords)
 {

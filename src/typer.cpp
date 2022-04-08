@@ -1,11 +1,11 @@
 #include "typer.h"
 #include "display.h"
 #include "file.h"
+#include "ncurses.h"
 #include "util.h"
 #include <algorithm>
 #include <cctype>
 #include <chrono>
-#include <curses.h>
 #include <iostream>
 
 void ncurses_setup()
