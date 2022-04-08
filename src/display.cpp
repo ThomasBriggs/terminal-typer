@@ -64,6 +64,12 @@ WINDOW* getInputWin()
 WINDOW* getPromptWin()
 {
     WINDOW* win = newwin(getmaxy(stdscr) - 3, getmaxx(stdscr), 3, 0);
+    drawPrompt(win);
+    return win;
+}
+
+void drawPrompt(WINDOW* const win)
+{
     init_pair(3, COLOR_YELLOW, -1);
     wattron(win, COLOR_PAIR(3));
     box(win, 0, 0);
@@ -71,7 +77,6 @@ WINDOW* getPromptWin()
     wattron(win, A_BOLD);
     mvwprintw(win, 0, 1, "Prompt");
     wattroff(win, A_BOLD);
-    return win;
 }
 
 void drawInput(WINDOW* const win)
