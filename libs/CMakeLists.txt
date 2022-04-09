@@ -18,7 +18,7 @@ ExternalProject_Add(ncurses-extern
     GIT_REPOSITORY https://github.com/mirror/ncurses.git
     GIT_TAG 64eb5fa
     UPDATE_COMMAND ""
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix <INSTALL_DIR> --with-normal --without-debug --without-manpages --disable-overwrite --includedir=<INSTALL_DIR>/include
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix <INSTALL_DIR> --with-shared --without-debug --without-manpages --includedir <INSTALL_DIR>/include
     BUILD_COMMAND make -C <BINARY_DIR>
     INSTALL_COMMAND make -C <BINARY_DIR> install
 )
@@ -34,4 +34,12 @@ else ()
     target_include_directories(ncurses-lib INTERFACE ${CURSES_INCLUDE_DIRS})
 endif()
 
+add_custom_target(clean-libs
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMAND rm -rf cxxopts
+    COMMAND rm -rf ncurses
+)
 
+list(APPEND CMAKE_BUILD_RPATH /home/thomas/Documents/terminal-typer/libs/ncurses/lib)
+message(STATUS ${CURSES_LIBRARIES})
+set(CMAKE_BUILD_RPATH ${CMAKE_BUILD_RPATH} PARENT_SCOPE)
