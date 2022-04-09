@@ -1,16 +1,17 @@
 #include "typer.h"
 #include "display.h"
 #include "file.h"
-#include "util.h"
 #include "ncurses.h"
+#include "util.h"
 #include <algorithm>
 #include <cctype>
 #include <chrono>
 #include <iostream>
+#include <memory>
 
-void ncurses_setup()
+std::unique_ptr<WINDOW, void (*)(WINDOW*)> ncurses_setup()
 {
-    initscr();
+    std::unique_ptr<WINDOW, void (*)(WINDOW*)> scr(initscr(), [](WINDOW* s) { endwin(); delwin(s); });
     use_default_colors();
     assume_default_colors(-1, -1);
     cbreak();
@@ -18,11 +19,12 @@ void ncurses_setup()
     noecho();
     start_color();
     curs_set(0);
+    return scr;
 }
 
 int typer(std::vector<std::string> words)
 {
-    ncurses_setup();
+    auto scr = ncurses_setup();
 
     WINDOW* inputWin = getInputWin();
     WINDOW* promptWin = getPromptWin();
@@ -89,7 +91,7 @@ int typer(std::vector<std::string> words)
         wrefresh(inputWin);
         wrefresh(promptWin);
     }
-    endwin();
+    scr.reset();
     auto stop = clock::now();
     displayResults(std::chrono::duration_cast<std::chrono::milliseconds>(stop - start),
         charsTyped, correctCharsTyped, numWords, typedWords, words);
