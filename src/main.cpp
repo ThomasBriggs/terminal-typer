@@ -13,7 +13,7 @@ cxxopts::Options setupArgs()
         "q, quote", "Type a random quote", cxxopts::value<std::string>()->implicit_value(""))(
         "w, words", "Type 50 random words from top 100 words, or --words = X where X is the number of words ", cxxopts::value<int>()->implicit_value("50")->default_value("50"))(
         "words-list", "The word list to choose random words from, if used with --quote, this will have no effect", cxxopts::value<std::string>()->default_value("top_100.txt"))(
-        "l, list-resources", "List the avilables word lists")(
+        "list", "List the avilables word lists")(
         "h, help", "Print usage");
 
     return options;
@@ -42,7 +42,11 @@ int main(int argc, char const* argv[])
     try {
         results = options.parse(argc, argv);
     } catch (cxxopts::option_syntax_exception& e) {
-        std::cerr << "Please check your arguments!, see the help\n";
+        std::cerr << "Unknown syntax - " << e.what() << '\n';
+        std::cout << options.help();
+        exit(1);
+    } catch (cxxopts::option_not_exists_exception& e) {
+        std::cerr << "Unknown option - " << e.what() << '\n';
         std::cout << options.help();
         exit(1);
     }
