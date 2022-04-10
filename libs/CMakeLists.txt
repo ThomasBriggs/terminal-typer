@@ -32,14 +32,40 @@ if ((NOT ${CURSES_FOUND}) OR ${FORCE_NON_LOCAL_LIBS})
 else ()
     target_link_libraries(ncurses-lib INTERFACE ${CURSES_LIBRARIES})
     target_include_directories(ncurses-lib INTERFACE ${CURSES_INCLUDE_DIRS})
+    message(STATUS NCURSESPATH:${CURSES_LIBRARIES})
 endif()
+
+list(APPEND CMAKE_BUILD_RPATH /home/thomas/Documents/terminal-typer/libs/ncurses/lib)
+set(CMAKE_BUILD_RPATH ${CMAKE_BUILD_RPATH} PARENT_SCOPE)
+
+ExternalProject_Add(libcurl-extern
+    EXCLUDE_FROM_ALL TRUE
+    INSTALL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libcurl
+    GIT_REPOSITORY https://github.com/curl/curl.git
+    GIT_TAG 64db5c5
+    UPDATE_COMMAND ""
+    CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -DBUILD_CURL_EXE:BOOL=FALSE
+        -DBUILD_SHARED_LIBS:BOOL=FALSE
+
+)
+
+add_library(libcurl-lib INTERFACE)
+find_package(CURL QUIET)
+if ((NOT ${CURL_FOUND}) OR ${FORCE_NON_LOCAL_LIBS})
+    add_dependencies(libcurl-lib libcurl-extern)
+    target_link_libraries(libcurl-lib INTERFACE -L${CMAKE_CURRENT_SOURCE_DIR}/libcurl/lib -lcurl -lssl -lcrypto)
+    target_include_directories(libcurl-lib INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/libcurl/include)
+else ()
+    target_link_libraries(libcurl-lib INTERFACE CURL::libcurl)
+    message(STATUS CURLPATH:${CURL_LIBRARIES})
+endif()
+
 
 add_custom_target(clean-libs
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMAND rm -rf cxxopts
     COMMAND rm -rf ncurses
+    COMMAND rm -rf libcurl
 )
-
-list(APPEND CMAKE_BUILD_RPATH /home/thomas/Documents/terminal-typer/libs/ncurses/lib)
-message(STATUS ${CURSES_LIBRARIES})
-set(CMAKE_BUILD_RPATH ${CMAKE_BUILD_RPATH} PARENT_SCOPE)
