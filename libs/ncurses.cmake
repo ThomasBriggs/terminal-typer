@@ -11,6 +11,19 @@ ExternalProject_Add(ncurses-extern
 )
 
 add_library(ncurses-lib INTERFACE)
-add_dependencies(ncurses-lib ncurses-extern)
-target_link_libraries(ncurses-lib INTERFACE ${CMAKE_SOURCE_DIR}/libs/ncurses/lib/libncurses.so)
-target_include_directories(ncurses-lib INTERFACE ${CMAKE_SOURCE_DIR}/libs/ncurses/include/ncurses)
+set(CURSES_NEED_NCURSES TRUE)
+find_package(Curses QUIET)
+
+if(${FORCE_NON_LOCAL_LIBS} OR !${CURSES_FOUND})
+    message(STATUS "Using external NCURSES")
+    add_dependencies(ncurses-lib ncurses-extern)
+    ExternalProject_Get_Property(ncurses-extern INSTALL_DIR)
+    target_link_libraries(ncurses-lib INTERFACE ${INSTALL_DIR}/lib/libncurses.so)
+    target_include_directories(ncurses-lib INTERFACE ${INSTALL_DIR}/include)
+    # target_include_directories(ncurses-lib INTERFACE ${INSTALL_DIR}/include/ncurses)
+elseif(${CURSES_FOUND})
+    message(STATUS "Using interal NCURSES")
+    target_link_libraries(ncurses-lib INTERFACE ${CURSES_LIBRARIES})
+    target_include_directories(ncurses-lib INTERFACE ${CURSES_INCLUDE_DIRS})
+endif()
+
