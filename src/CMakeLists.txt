@@ -15,6 +15,3 @@ set_target_properties(
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
-
-add_executable(curl curltest.cpp)
-target_link_libraries(curl libcurl-lib)

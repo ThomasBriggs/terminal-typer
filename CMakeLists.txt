@@ -23,8 +23,7 @@ if(${COMPILER_WARNINGS})
     endif()
 endif()
 
-set(FORCE_NON_LOCAL_LIBS OFF CACHE BOOL "Force to build using non local libraries")
-
+set(FORCE_NON_LOCAL_LIBS OFF CACHE BOOL "Force to build using non-local libraries")
 
 #Main Source Directory
 add_subdirectory(libs)
