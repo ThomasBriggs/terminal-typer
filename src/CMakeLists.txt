@@ -10,6 +10,9 @@ set(SRC_FILES
 add_executable(main ${SRC_FILES})
 target_link_libraries(main ncurses-lib cxxopts-lib)
 
+add_executable(curl curl.cpp)
+target_link_libraries(curl cpr-lib)
+
 set_target_properties(
     main
     PROPERTIES
