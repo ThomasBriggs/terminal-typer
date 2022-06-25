@@ -9,20 +9,7 @@
 #include <iostream>
 #include <memory>
 
-std::unique_ptr<WINDOW, void (*)(WINDOW*)> ncurses_setup()
-{
-    std::unique_ptr<WINDOW, void (*)(WINDOW*)> scr(initscr(), [](WINDOW* s) { endwin(); delwin(s); });
-    use_default_colors();
-    assume_default_colors(-1, -1);
-    cbreak();
-    keypad(stdscr, true);
-    noecho();
-    start_color();
-    curs_set(0);
-    return scr;
-}
-
-int typer(std::vector<std::string> words)
+typer::typer()
 {
     auto scr = ncurses_setup();
 
@@ -40,6 +27,27 @@ int typer(std::vector<std::string> words)
     size_t correctCharsTyped = 0;
 
     bool active = true;
+}
+
+typer::~typer()
+{
+}
+
+std::unique_ptr<WINDOW, void (*)(WINDOW*)> typer::ncurses_setup()
+{
+    std::unique_ptr<WINDOW, void (*)(WINDOW*)> scr(initscr(), [](WINDOW* p) { endwin(); });
+    use_default_colors();
+    assume_default_colors(-1, -1);
+    cbreak();
+    // keypad(scr.get(), true);
+    noecho();
+    start_color();
+    curs_set(0);
+    return scr;
+}
+
+int typer::run()
+{
     typedef std::chrono::system_clock clock;
     auto start = clock::time_point::min();
 
@@ -47,11 +55,12 @@ int typer(std::vector<std::string> words)
     wrefresh(promptWin);
     wmove(inputWin, 1, 1);
     while (active) {
-        input = getch();
+        input = wgetch(scr.get());
         if (start == clock::time_point::min())
             start = clock::now();
 
         switch (input) {
+        // Window resize
         case KEY_RESIZE:
             wresize(stdscr, getmaxy(stdscr), getmaxx(stdscr));
             wclear(stdscr);
@@ -61,6 +70,7 @@ int typer(std::vector<std::string> words)
             drawPrompt(promptWin);
             displayWords(promptWin, words, curWord, typedWords);
             refresh();
+        // Backspace, 127 is sometimes also a backspace
         case KEY_BACKSPACE:
         case 127:
             if (typedWords[curWord].empty())
@@ -70,6 +80,7 @@ int typer(std::vector<std::string> words)
             displayInput(inputWin, typedWords[curWord]);
             displayWords(promptWin, words, curWord, typedWords);
             break;
+        // Space
         case ' ':
             curWord += 1;
             if (curWord >= words.size())
@@ -95,5 +106,4 @@ int typer(std::vector<std::string> words)
     auto stop = clock::now();
     displayResults(std::chrono::duration_cast<std::chrono::milliseconds>(stop - start),
         charsTyped, correctCharsTyped, numWords, typedWords, words);
-    return 0;
 }
