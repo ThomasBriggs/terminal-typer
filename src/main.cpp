@@ -5,6 +5,8 @@
 #include <filesystem>
 #include <iostream>
 #include <string>
+#include "cpr/cpr.h"
+#include "json.h"
 
 cxxopts::Options setupArgs()
 {
@@ -69,10 +71,11 @@ int main(int argc, char const* argv[])
         mode_set = true;
         const std::string& quotePath = results["quote"].as<std::string>();
         if (quotePath == "")
-            words = getAllWords(root.append("aladin.txt"));
+            words = getQuote();
         else {
             words = getAllWords(quotePath);
         }
+
     }
 
     if (results.count("words")) {

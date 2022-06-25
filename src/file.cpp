@@ -1,9 +1,12 @@
 #include "file.h"
+#include "cpr/cpr.h"
 #include "error_handeling.h"
+#include "json.h"
 #include <algorithm>
 #include <exception>
 #include <filesystem>
 #include <fstream>
+#include <iterator>
 #include <random>
 #include <vector>
 
@@ -104,8 +107,32 @@ std::vector<std::string> getAllWords(const std::string& f)
 void printWordLists(const std::string& filepath)
 {
     std::vector<std::string> files;
-    for (auto &&i : std::filesystem::directory_iterator(filepath))
-    {
+    for (auto&& i : std::filesystem::directory_iterator(filepath)) {
         std::cout << i.path().filename().c_str() << '\n';
     }
+}
+
+std::vector<std::string> getQuote()
+{
+    cpr::Url base_url("api.quotable.io/random");
+    cpr::Response res;
+
+    unsigned short attempts = 0;
+
+    while (attempts < 3) {
+        std::cout << "Loading..." << '\n';
+        res = cpr::Get(base_url, cpr::Parameters { { "minLength", "150" } }, cpr::Timeout(5000));
+        if (res.status_code == 200) {
+            auto json = json::jobject::parse(res.text);
+            std::stringstream ss(json["content"]);
+            std::istream_iterator<std::string> begin(ss);
+            std::istream_iterator<std::string> end;
+            return std::vector<std::string>(begin, end);
+        } else
+            attempts++;
+    }
+    std::cerr << "Failed to connect to the server" << '\n';
+    std::cout << "Press enter to close";
+    std::cin.get();
+    exit(1);
 }
