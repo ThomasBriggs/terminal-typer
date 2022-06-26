@@ -1,29 +1,23 @@
 #include "typer.h"
 
-typer::typer(std::vector<std::string> words) : scr{ncurses_setup()}
+Typer::Typer(std::vector<std::string> words)
+    : scr { ncurses_setup() }
 {
 
-    WINDOW* inputWin = getInputWin();
-    WINDOW* promptWin = getPromptWin();
+    inputWin = getInputWin();
+    promptWin = getPromptWin();
     refresh();
     wrefresh(inputWin);
     wrefresh(promptWin);
-
     u_short numWords = words.size();
-    std::vector<std::string> typedWords(words.size());
-    int input;
-    int curWord = 0;
-    size_t charsTyped = 0;
-    size_t correctCharsTyped = 0;
-
-    bool active = true;
+    typedWords = std::vector<std::string> { words.size() };
+    curWord = 0;
+    charsTyped = 0;
+    correctCharsTyped = 0;
+    active = true;
 }
 
-typer::~typer()
-{
-}
-
-std::unique_ptr<WINDOW, void (*)(WINDOW*)> typer::ncurses_setup()
+std::unique_ptr<WINDOW, void (*)(WINDOW*)> Typer::ncurses_setup()
 {
     std::unique_ptr<WINDOW, void (*)(WINDOW*)> scr(initscr(), [](WINDOW* p) { endwin(); });
     use_default_colors();
@@ -36,7 +30,7 @@ std::unique_ptr<WINDOW, void (*)(WINDOW*)> typer::ncurses_setup()
     return scr;
 }
 
-int typer::run()
+int Typer::run()
 {
     typedef std::chrono::system_clock clock;
     auto start = clock::time_point::min();
@@ -96,4 +90,5 @@ int typer::run()
     auto stop = clock::now();
     displayResults(std::chrono::duration_cast<std::chrono::milliseconds>(stop - start),
         charsTyped, correctCharsTyped, numWords, typedWords, words);
+    return 0;
 }

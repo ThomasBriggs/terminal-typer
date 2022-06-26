@@ -93,6 +93,7 @@ int main(int argc, char const* argv[])
         words = getRandomWords(root.append(results["words-list"].as<std::string>()), results["words"].as<int>());
 
 main:
-    typer(words);
+    Typer typer(words);
+    typer.run();
     return 0;
 }

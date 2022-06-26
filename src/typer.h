@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-class typer {
+class Typer {
 private:
     std::unique_ptr<WINDOW, void (*)(WINDOW*)> scr;
     std::vector<std::string> words;
@@ -30,7 +30,6 @@ private:
     std::unique_ptr<WINDOW, void (*)(WINDOW*)> ncurses_setup();
 
 public:
-    typer(std::vector<std::string> words);
-    ~typer();
+    Typer(std::vector<std::string> words);
     int run();
 };
