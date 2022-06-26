@@ -5,8 +5,6 @@
 #include <filesystem>
 #include <iostream>
 #include <string>
-#include "cpr/cpr.h"
-#include "json.h"
 
 cxxopts::Options setupArgs()
 {
@@ -75,7 +73,6 @@ int main(int argc, char const* argv[])
         else {
             words = getAllWords(quotePath);
         }
-
     }
 
     if (results.count("words")) {
