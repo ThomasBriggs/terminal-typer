@@ -1,17 +1,7 @@
 #include "typer.h"
-#include "display.h"
-#include "file.h"
-#include "ncurses.h"
-#include "util.h"
-#include <algorithm>
-#include <cctype>
-#include <chrono>
-#include <iostream>
-#include <memory>
 
-typer::typer()
+typer::typer(std::vector<std::string> words) : scr{ncurses_setup()}
 {
-    auto scr = ncurses_setup();
 
     WINDOW* inputWin = getInputWin();
     WINDOW* promptWin = getPromptWin();
@@ -39,7 +29,7 @@ std::unique_ptr<WINDOW, void (*)(WINDOW*)> typer::ncurses_setup()
     use_default_colors();
     assume_default_colors(-1, -1);
     cbreak();
-    // keypad(scr.get(), true);
+    keypad(scr.get(), true);
     noecho();
     start_color();
     curs_set(0);
