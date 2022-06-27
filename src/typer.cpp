@@ -1,44 +1,43 @@
 #include "typer.h"
 #include "display.h"
-#include "file.h"
 #include "util.h"
 #include <algorithm>
 #include <cctype>
 #include <chrono>
 #include <iostream>
-#include <memory>
 
-std::unique_ptr<WINDOW, void (*)(WINDOW*)> ncurses_setup()
+Typer::Typer(std::vector<std::string> words)
+    : scr { ncurses_setup() }
 {
-    std::unique_ptr<WINDOW, void (*)(WINDOW*)> scr(initscr(), [](WINDOW* s) { endwin(); delwin(s); });
+    this->words = words;
+    inputWin = getInputWin();
+    promptWin = getPromptWin();
+    refresh();
+    wrefresh(inputWin);
+    wrefresh(promptWin);
+    u_short numWords = words.size();
+    typedWords = std::vector<std::string> { words.size() };
+    curWord = 0;
+    charsTyped = 0;
+    correctCharsTyped = 0;
+    active = true;
+}
+
+std::unique_ptr<WINDOW, void (*)(WINDOW*)> Typer::ncurses_setup()
+{
+    std::unique_ptr<WINDOW, void (*)(WINDOW*)> scr(initscr(), [](WINDOW* p) { endwin(); });
     use_default_colors();
     assume_default_colors(-1, -1);
     cbreak();
-    keypad(stdscr, true);
+    keypad(scr.get(), true);
     noecho();
     start_color();
     curs_set(0);
     return scr;
 }
 
-int typer(std::vector<std::string> words)
+int Typer::run()
 {
-    auto scr = ncurses_setup();
-
-    WINDOW* inputWin = getInputWin();
-    WINDOW* promptWin = getPromptWin();
-    refresh();
-    wrefresh(inputWin);
-    wrefresh(promptWin);
-
-    u_short numWords = words.size();
-    std::vector<std::string> typedWords(words.size());
-    int input;
-    int curWord = 0;
-    size_t charsTyped = 0;
-    size_t correctCharsTyped = 0;
-
-    bool active = true;
     typedef std::chrono::system_clock clock;
     auto start = clock::time_point::min();
 
@@ -46,11 +45,12 @@ int typer(std::vector<std::string> words)
     wrefresh(promptWin);
     wmove(inputWin, 1, 1);
     while (active) {
-        input = getch();
+        input = wgetch(scr.get());
         if (start == clock::time_point::min())
             start = clock::now();
 
         switch (input) {
+        // Window resize
         case KEY_RESIZE:
             wresize(stdscr, getmaxy(stdscr), getmaxx(stdscr));
             wclear(stdscr);
@@ -60,6 +60,7 @@ int typer(std::vector<std::string> words)
             drawPrompt(promptWin);
             displayWords(promptWin, words, curWord, typedWords);
             refresh();
+        // Backspace, 127 is sometimes also a backspace
         case KEY_BACKSPACE:
         case 127:
             if (typedWords[curWord].empty())
@@ -69,6 +70,7 @@ int typer(std::vector<std::string> words)
             displayInput(inputWin, typedWords[curWord]);
             displayWords(promptWin, words, curWord, typedWords);
             break;
+        // Space
         case ' ':
             curWord += 1;
             if (curWord >= words.size())
