@@ -5,8 +5,6 @@
 #include <filesystem>
 #include <iostream>
 #include <string>
-#include "cpr/cpr.h"
-#include "json.h"
 
 cxxopts::Options setupArgs()
 {
@@ -93,7 +91,6 @@ int main(int argc, char const* argv[])
         words = getRandomWords(root.append(results["words-list"].as<std::string>()), results["words"].as<int>());
 
 main:
-    Typer typer(words);
-    typer.run();
+    Typer(words).run();
     return 0;
 }
