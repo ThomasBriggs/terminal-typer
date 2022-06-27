@@ -1,13 +1,6 @@
 #pragma once
 
-#include "display.h"
-#include "file.h"
 #include "ncurses.h"
-#include "util.h"
-#include <algorithm>
-#include <cctype>
-#include <chrono>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
