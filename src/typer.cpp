@@ -1,9 +1,15 @@
 #include "typer.h"
+#include "display.h"
+#include "util.h"
+#include <algorithm>
+#include <cctype>
+#include <chrono>
+#include <iostream>
 
 Typer::Typer(std::vector<std::string> words)
     : scr { ncurses_setup() }
 {
-
+    this->words = words;
     inputWin = getInputWin();
     promptWin = getPromptWin();
     refresh();
