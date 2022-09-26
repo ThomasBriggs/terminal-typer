@@ -8,4 +8,5 @@ add_custom_target(clean-libs
     COMMAND rm -rf cxxopts
     COMMAND rm -rf ncurses
     COMMAND rm -rf cpr
+    COMMAND rm -rf simpleson
 )
