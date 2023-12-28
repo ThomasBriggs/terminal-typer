@@ -7,7 +7,7 @@
 #include <iostream>
 
 Typer::Typer(std::vector<std::string> words)
-    : scr { ncurses_setup() }
+    : scr{ncurses_setup()}
 {
     this->words = words;
     inputWin = getInputWin();
@@ -16,16 +16,17 @@ Typer::Typer(std::vector<std::string> words)
     wrefresh(inputWin);
     wrefresh(promptWin);
     u_short numWords = words.size();
-    typedWords = std::vector<std::string> { words.size() };
+    typedWords = std::vector<std::string>{words.size()};
     curWord = 0;
     charsTyped = 0;
     correctCharsTyped = 0;
     active = true;
 }
 
-std::unique_ptr<WINDOW, void (*)(WINDOW*)> Typer::ncurses_setup()
+std::unique_ptr<WINDOW, void (*)(WINDOW *)> Typer::ncurses_setup()
 {
-    std::unique_ptr<WINDOW, void (*)(WINDOW*)> scr(initscr(), [](WINDOW* p) { endwin(); });
+    std::unique_ptr<WINDOW, void (*)(WINDOW *)> scr(initscr(), [](WINDOW *p)
+                                                    { endwin(); });
     use_default_colors();
     assume_default_colors(-1, -1);
     cbreak();
@@ -44,12 +45,14 @@ int Typer::run()
     displayWords(promptWin, words, curWord, typedWords);
     wrefresh(promptWin);
     wmove(inputWin, 1, 1);
-    while (active) {
+    while (active)
+    {
         input = wgetch(scr.get());
         if (start == clock::time_point::min())
             start = clock::now();
 
-        switch (input) {
+        switch (input)
+        {
         // Window resize
         case KEY_RESIZE:
             wresize(stdscr, getmaxy(stdscr), getmaxx(stdscr));
@@ -95,6 +98,6 @@ int Typer::run()
     scr.reset();
     auto stop = clock::now();
     displayResults(std::chrono::duration_cast<std::chrono::milliseconds>(stop - start),
-        charsTyped, correctCharsTyped, numWords, typedWords, words);
+                   charsTyped, correctCharsTyped, numWords, typedWords, words);
     return 0;
 }

@@ -8,7 +8,7 @@
 
 cxxopts::Options setupArgs()
 {
-    cxxopts::Options options("Terminal-typer", "A terminal typing game");
+    cxxopts::Options options("terminal-typer", "A terminal typing game");
     options.add_options()(
         "q, quote", "Type a random quote", cxxopts::value<std::string>()->implicit_value(""))(
         "w, words", "Type 50 random words from top 100 words, or --words = X where X is the number of words ", cxxopts::value<int>()->implicit_value("50")->default_value("50"))(
@@ -19,7 +19,7 @@ cxxopts::Options setupArgs()
     return options;
 }
 
-std::filesystem::path setupPath(char const* argv[])
+std::filesystem::path setupPath(char const *argv[])
 {
     std::filesystem::path root = argv[0];
     if (root.parent_path().has_parent_path())
@@ -29,23 +29,27 @@ std::filesystem::path setupPath(char const* argv[])
     return root;
 }
 
-int main(int argc, char const* argv[])
+int main(int argc, char const *argv[])
 {
     auto root = setupPath(argv);
     auto options = setupArgs();
 
     std::vector<std::string> words;
     bool mode_set = false;
-    bool non_mode_set = false;
 
     cxxopts::ParseResult results;
-    try {
+    try
+    {
         results = options.parse(argc, argv);
-    } catch (cxxopts::option_syntax_exception& e) {
+    }
+    catch (cxxopts::option_syntax_exception &e)
+    {
         std::cerr << "Unknown syntax - " << e.what() << '\n';
         std::cout << options.help();
         exit(1);
-    } catch (cxxopts::option_not_exists_exception& e) {
+    }
+    catch (cxxopts::option_not_exists_exception &e)
+    {
         std::cerr << "Unknown option - " << e.what() << '\n';
         std::cout << options.help();
         exit(1);
@@ -53,35 +57,41 @@ int main(int argc, char const* argv[])
 
     // If no arguments are given, set the words to be the default arguments and go to the main loop,
     // skip checking args as none are given.
-    if (argc == 1) {
+    if (argc == 1)
+    {
         mode_set = true;
         words = getRandomWords(root.append(results["words-list"].as<std::string>()), results["words"].as<int>());
         goto main;
     }
 
-    if (results.count("help")) {
+    if (results.count("help"))
+    {
         std::cout << options.help() << '\n';
         exit(0);
     }
 
-    if (results.count("quote")) {
+    if (results.count("quote"))
+    {
         checkModeSet(mode_set);
         mode_set = true;
-        const std::string& quotePath = results["quote"].as<std::string>();
+        const std::string &quotePath = results["quote"].as<std::string>();
         if (quotePath == "")
             words = getQuote();
-        else {
+        else
+        {
             words = getAllWords(quotePath);
         }
     }
 
-    if (results.count("words")) {
+    if (results.count("words"))
+    {
         checkModeSet(mode_set);
         mode_set = true;
         words = getRandomWords(root.append(results["words-list"].as<std::string>()), results["words"].as<int>());
     }
 
-    if (results.count("list-resources")) {
+    if (results.count("list-resources"))
+    {
         printWordLists(root.c_str());
         exit(0);
     }
