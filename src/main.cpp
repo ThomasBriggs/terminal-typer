@@ -14,7 +14,7 @@ cxxopts::Options setupArgs()
         "w, words", "Type 50 random words from top 100 words, or --words = X where X is the number of words ", cxxopts::value<int>()->implicit_value("50")->default_value("50"))(
         "words-list", "The word list to choose random words from, if used with --quote, this will have no effect", cxxopts::value<std::string>()->default_value("top_100.txt"))(
         "list", "List the avilables word lists")(
-        "h, help", "Print usage");
+        "h, help", "Print usage command (this message)");
 
     return options;
 }
