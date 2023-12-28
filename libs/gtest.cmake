@@ -13,14 +13,22 @@ ExternalProject_Add(gtest-extern
         <INSTALL_DIR>/lib/libgtest_main.a
 )
 
-
 add_library(gtest-lib INTERFACE)
-add_dependencies(gtest-lib gtest-extern)
-ExternalProject_Get_Property(gtest-extern INSTALL_DIR)
-target_link_libraries(gtest-lib INTERFACE
-    ${INSTALL_DIR}/lib/libgmock.a
-    ${INSTALL_DIR}/lib/libgmock_main.a
-    ${INSTALL_DIR}/lib/libgtest.a
-    ${INSTALL_DIR}/lib/libgtest_main.a)
-target_include_directories(gtest-lib INTERFACE ${INSTALL_DIR}/include)
+find_package(GTest QUIET)
+
+if(${FORCE_NON_LOCAL_LIBS} OR (NOT ${GTEST_FOUND}))
+    message(STATUS "Using external GTest")
+    add_dependencies(gtest-lib gtest-extern)
+    ExternalProject_Get_Property(gtest-extern INSTALL_DIR)
+    target_link_libraries(gtest-lib INTERFACE
+        ${INSTALL_DIR}/lib/libgmock.a
+        ${INSTALL_DIR}/lib/libgmock_main.a
+        ${INSTALL_DIR}/lib/libgtest.a
+        ${INSTALL_DIR}/lib/libgtest_main.a)
+    target_include_directories(gtest-lib INTERFACE ${INSTALL_DIR}/include)
+elseif(${GTEST_FOUND})
+    message(STATUS "Using interal GTest")
+    target_link_libraries(gtest-lib INTERFACE ${GTEST_LIBRARIES})
+    target_include_directories(gtest-lib INTERFACE ${GTEST_INCLUDE_DIRS})
+endif()
 

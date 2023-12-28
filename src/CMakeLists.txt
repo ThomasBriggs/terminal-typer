@@ -1,14 +1,5 @@
-set(SRC_FILES 
-    main.cpp
-    typer.cpp    
-    file.cpp
-    display.cpp
-    util.cpp
-    error_handeling.cpp
-)
-
-add_executable(main ${SRC_FILES})
-target_link_libraries(main ncurses-lib cxxopts-lib cpr-lib simpleson-lib gtest-lib)
+add_executable(main main.cpp)
+target_link_libraries(main Typer cxxopts-lib)
 
 
 set_target_properties(
@@ -16,3 +7,5 @@ set_target_properties(
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
+
+add_subdirectory(typer)

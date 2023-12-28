@@ -20,13 +20,13 @@ void displayWords(WINDOW *const win, const std::vector<std::string> &words, int 
         }
 
         // Display previous words
-        // if (i < currentWord)
-        // {
-        //     if (inputWords[i] == words[i]) // If the displayed matches the word typed, make it green
-        //         colour = 7;
-        //     else // Make if red
-        //         colour = 6;
-        // }
+        if (i < currentWord)
+        {
+            if (inputWords[i] == words[i]) // If the displayed matches the word typed, make it green
+                colour = 7;
+            else // Make if red
+                colour = 6;
+        }
 
         // Display the current word
         if (i == currentWord)
@@ -36,7 +36,6 @@ void displayWords(WINDOW *const win, const std::vector<std::string> &words, int 
                 colour = 6;
 
         wattron(win, COLOR_PAIR(colour));
-        char c;
         for (char c : *curWord)
         {
             waddch(win, c);

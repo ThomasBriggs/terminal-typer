@@ -2,7 +2,7 @@ ExternalProject_Add(ncurses-extern
     EXCLUDE_FROM_ALL TRUE
     INSTALL_DIR ${CMAKE_SOURCE_DIR}/libs/ncurses
     GIT_REPOSITORY https://github.com/mirror/ncurses.git
-    GIT_TAG deb0d07
+    GIT_TAG master
     UPDATE_COMMAND ""
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix <INSTALL_DIR> --with-shared --without-debug --without-manpages --includedir <INSTALL_DIR>/include
     BUILD_COMMAND make -C <BINARY_DIR>
@@ -14,7 +14,7 @@ add_library(ncurses-lib INTERFACE)
 set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses QUIET)
 
-if(${FORCE_NON_LOCAL_LIBS} OR !${CURSES_FOUND})
+if(${FORCE_NON_LOCAL_LIBS} OR (NOT ${CURSES_FOUND}))
     message(STATUS "Using external NCURSES")
     add_dependencies(ncurses-lib ncurses-extern)
     ExternalProject_Get_Property(ncurses-extern INSTALL_DIR)
