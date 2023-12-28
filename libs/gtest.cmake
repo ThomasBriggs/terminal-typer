@@ -16,6 +16,7 @@ ExternalProject_Add(gtest-extern
 
 add_library(gtest-lib INTERFACE)
 add_dependencies(gtest-lib gtest-extern)
+ExternalProject_Get_Property(gtest-extern INSTALL_DIR)
 target_link_libraries(gtest-lib INTERFACE
     ${INSTALL_DIR}/lib/libgmock.a
     ${INSTALL_DIR}/lib/libgmock_main.a
