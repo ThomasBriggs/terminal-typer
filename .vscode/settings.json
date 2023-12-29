@@ -73,7 +73,16 @@
         "climits": "cpp",
         "codecvt": "cpp",
         "optional": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "csignal": "cpp",
+        "any": "cpp",
+        "bitset": "cpp",
+        "charconv": "cpp",
+        "forward_list": "cpp",
+        "regex": "cpp",
+        "format": "cpp",
+        "span": "cpp",
+        "stdfloat": "cpp"
     },
     "editor.tokenColorCustomizations": {
         "textMateRules": [

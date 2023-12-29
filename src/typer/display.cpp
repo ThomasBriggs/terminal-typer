@@ -40,8 +40,6 @@ void displayWords(WINDOW *const win, const std::vector<std::string> &words, int 
         {
             waddch(win, c);
         }
-
-        // wprintw(win, curWord->c_str());
         waddch(win, ' ');
         wattroff(win, COLOR_PAIR(colour));
         colour = 0;
