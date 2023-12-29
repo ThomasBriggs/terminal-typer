@@ -28,17 +28,17 @@ void displayWords(WINDOW *const win, const std::vector<std::string> &words, int 
                 colour = 6;
         }
 
-        // Display the current word
-        if (i == currentWord)
-            if (isInputCorrect(words[currentWord], inputWords[currentWord]))
-                colour = 5;
-            else
-                colour = 6;
-
         wattron(win, COLOR_PAIR(colour));
-        for (char c : *curWord)
+        for (size_t j = 0; j < curWord->size(); j++)
         {
-            waddch(win, c);
+            // Display the current word
+            if (i == currentWord)
+                // if (isInputCorrect(words[currentWord], inputWords[currentWord]))
+                if (isCharCorrectAtPos(inputWords[currentWord], words[currentWord], j))
+                    colour = 5;
+                else
+                    colour = 6;
+            waddch(win, curWord->at(j));
         }
         waddch(win, ' ');
         wattroff(win, COLOR_PAIR(colour));
